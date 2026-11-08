@@ -172,6 +172,7 @@ input[type=color]{height:44px;padding:3px;cursor:pointer}
  .mt{font-size:21px}
  .ib{min-height:44px;min-width:44px;padding:8px 12px}
  #addBtn{grid-column:1/-1;width:100%;min-height:48px}
+ #outBtn{grid-column:1/-1}
  .lg{display:none}
  .ag{padding:16px}
  .ae{flex-wrap:wrap;row-gap:6px}
@@ -215,7 +216,7 @@ footer{margin-top:72px;border-top:1px solid var(--line);padding-block:28px;color
   <div class="filters" id="filters" role="group" aria-label="تصفية حسب النوع"></div>
   <div class="bar">
     <div class="mt" id="mt"></div>
-    <div class="nv"><button class="ib" id="prev" aria-label="الشهر السابق">›</button><button class="ib" id="tdy">اليوم</button><button class="ib" id="next" aria-label="الشهر التالي">‹</button><button class="btn pri" id="addBtn" hidden>+ فعالية جديدة</button></div>
+    <div class="nv"><button class="ib" id="prev" aria-label="الشهر السابق">›</button><button class="ib" id="tdy">اليوم</button><button class="ib" id="next" aria-label="الشهر التالي">‹</button><button class="btn pri" id="addBtn" hidden>+ فعالية جديدة</button><button class="ib" id="outBtn" type="button" hidden>تسجيل خروج</button></div>
   </div>
   <div class="mg" id="mg"></div>
   <div class="ag" id="ag"></div>
@@ -242,6 +243,7 @@ footer{margin-top:72px;border-top:1px solid var(--line);padding-block:28px;color
   <form class="md" id="pf" novalidate role="dialog" aria-modal="true" aria-labelledby="ph">
     <h3 id="ph">كلمة السر</h3>
     <div id="phint" style="color:var(--mute);font-size:14px"></div>
+    <label for="pe" id="pel" hidden>الإيميل<input id="pe" type="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="email" dir="ltr" maxlength="120"></label>
     <label for="pp">كلمة سر<input id="pp" type="text" class="sec" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40" dir="auto"></label>
     <label for="pp2" id="pp2l" hidden>تأكيد كلمة السر<input id="pp2" type="text" class="sec" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40" dir="auto"></label>
     <button class="ib" type="button" id="kbt">⌨ لوحة مفاتيح (عربي / English)</button>
@@ -262,7 +264,6 @@ var FB_CONFIG={
   messagingSenderId:"268912410918",
   appId:"1:268912410918:web:c1abca2db88e238dde81e7"
 };
-var FB_ADMIN="admin@gmail.com";
 /* snapshot of events, shown before the database is connected and uploaded once into an empty database */
 var SNAP=[{"done":true,"e":"2026-09-01","k":"booth","s":"2026-09-01","t":"بوابة الهندسة","id":"e001"},{"done":true,"e":"2026-09-02","k":"booth","s":"2026-09-02","t":"اليوم الإرشادي في كلية الهندسة","id":"e002"},{"done":true,"e":"2026-09-10","k":"collab","s":"2026-09-06","t":"تعاون مع متجر Unikit (تنظيم)","id":"e003"},{"done":true,"e":"2026-09-22","k":"thu","s":"2026-09-22","t":"ثلوثية","id":"e004"},{"done":true,"e":"2026-09-23","k":"booth","s":"2026-09-23","t":"مشاركة اليوم الوطني","id":"e005"},{"done":true,"e":"2026-09-29","k":"week","s":"2026-09-27","t":"الأسبوع التعليمي · منشآت","id":"e006"},{"done":true,"e":"2026-10-01","k":"camp","s":"2026-09-30","t":"معسكر التسويق · دووت كرييتف","id":"e007"},{"done":true,"e":"2026-10-04","k":"meet","s":"2026-10-04","t":"لقاء نجوم الجامعة · مسرح 26","id":"e008"},{"done":true,"e":"2026-10-05","k":"meet","s":"2026-10-05","t":"لقاء لينكدان","id":"e009"},{"done":true,"e":"2026-10-06","k":"meet","s":"2026-10-06","t":"قيادات وصل الشرقية","id":"e010"},{"done":true,"e":"2026-10-06","k":"thu","s":"2026-10-06","t":"ثلوثية · معاذ","id":"e011"},{"done":true,"e":"2026-10-07","k":"week","s":"2026-10-06","t":"أسبوع الفضاء","id":"e012"},{"done":true,"e":"2026-10-08","k":"meet","s":"2026-10-08","t":"من الأندية إلى الأثر","id":"e013"},{"done":true,"e":"2026-10-10","k":"booth","s":"2026-10-10","t":"بوث ملتقى مركز","id":"e014"},{"done":true,"e":"2026-10-11","k":"space","s":"2026-10-11","t":"بوصلة حالم (تويتر)","id":"e015"},{"done":true,"e":"2026-10-14","k":"meet","s":"2026-10-14","t":"LMI (صقل)","id":"e016"},{"done":true,"e":"2026-10-19","k":"booth","s":"2026-10-18","t":"بوث جامعة جدة · معسكر الأعمال","id":"e017"},{"done":true,"e":"2026-10-20","k":"meet","s":"2026-10-20","t":"قيادات وصل Ben الخلود","id":"e018"},{"done":false,"e":"2026-10-24","k":"meet","s":"2026-10-24","t":"لقاء جسور","id":"e019"},{"done":true,"e":"2026-10-25","k":"space","s":"2026-10-25","t":"بوصلة حالم (تويتر)","id":"e020"},{"done":true,"e":"2026-10-25","k":"prog","s":"2026-10-25","t":"برنامج بيان (خاص)","id":"e021"},{"done":true,"e":"2026-10-26","k":"meet","s":"2026-10-26","t":"من الجامعة إلى السوق · م. محمد الغندور (صقل)","id":"e022"},{"done":true,"e":"2026-10-27","k":"thu","s":"2026-10-27","t":"ثلوثية · خلود موسى","id":"e023"},{"done":true,"e":"2026-10-27","k":"visit","s":"2026-10-27","t":"زيارة منشآت","id":"e024"},{"done":true,"e":"2026-10-28","k":"prog","s":"2026-10-28","t":"برنامج بيان (خاص)","id":"e025"},{"done":true,"e":"2026-10-29","k":"booth","s":"2026-10-29","t":"تدشين مجتمع ريادة الأعمال (تنظيم وبوث)","id":"e026"},{"done":false,"e":"2026-11-02","k":"kaust","s":"2026-11-02","t":"لقاء كاوست · الذكاء الاصطناعي","id":"e027"},{"done":false,"e":"2026-11-03","k":"thu","s":"2026-11-03","t":"ثلوثية · عاطف ساب","id":"e028"},{"done":false,"e":"2026-11-04","k":"kaust","s":"2026-11-04","t":"لقاء كاوست · المعلوماتية الحيوية","id":"e029"},{"done":false,"e":"2026-11-04","k":"visit","s":"2026-11-04","t":"زيارة مدارس (طالبات)","id":"e030"},{"done":false,"e":"2026-11-05","k":"visit","s":"2026-11-05","t":"زيارة مدارس (طلاب)","id":"e031"},{"done":false,"e":"2026-11-05","k":"prog","s":"2026-11-05","t":"برنامج بيان (خاص)","id":"e032"},{"done":false,"e":"2026-11-07","k":"meet","s":"2026-11-07","t":"لقاء الجامعات الثلاث · بوسطن، مانشستر، عزوز","id":"e033"},{"done":false,"e":"2026-11-08","k":"space","s":"2026-11-08","t":"بوصلة حالم (تويتر)","id":"e034"},{"done":false,"e":"2026-11-08","k":"kaust","s":"2026-11-08","t":"لقاء كاوست · تحولات الطاقة","id":"e035"},{"done":false,"e":"2026-11-08","k":"visit","s":"2026-11-08","t":"زيارة ميديا","id":"e036"},{"done":false,"e":"2026-11-12","k":"week","s":"2026-11-09","t":"أسبوع ريادة الأعمال","id":"e037"},{"done":false,"e":"2026-11-11","k":"kaust","s":"2026-11-11","t":"لقاء كاوست · الأمن السيبراني","id":"e038"},{"done":false,"e":"2026-11-12","k":"prog","s":"2026-11-12","t":"برنامج بيان (خاص)","id":"e039"},{"done":false,"e":"2026-11-15","k":"kaust","s":"2026-11-15","t":"لقاء كاوست · استدامة المياه","id":"e040"},{"done":false,"e":"2026-11-19","k":"prog","s":"2026-11-19","t":"برنامج بيان (خاص)","id":"e041"},{"done":false,"e":"2026-11-22","k":"space","s":"2026-11-22","t":"بوصلة حالم (تويتر)","id":"e042"},{"done":false,"e":"2026-11-23","k":"camp","s":"2026-11-22","t":"معسكر سلة","id":"e043"},{"done":false,"e":"2026-11-24","k":"thu","s":"2026-11-24","t":"ثلوثية · خالد اليحيى","id":"e044"},{"done":false,"e":"2026-11-25","k":"meet","s":"2026-11-25","t":"م. حازم النجار (صقل)","id":"e045"},{"done":false,"e":"2026-11-29","k":"meet","s":"2026-11-29","t":"لقاء الإفلاس · عدنان خياري","id":"e046"},{"done":false,"e":"2026-12-01","k":"thu","s":"2026-12-01","t":"ثلوثية · هشام رويحي","id":"e047"},{"done":false,"e":"2026-12-03","k":"meet","s":"2026-12-03","t":"مناظرة","id":"e048"},{"done":false,"e":"2026-12-06","k":"space","s":"2026-12-06","t":"بوصلة حالم (تويتر)","id":"e049"},{"done":false,"e":"2026-12-06","k":"meet","s":"2026-12-06","t":"لقاء P&G","id":"e050"},{"done":false,"e":"2026-12-08","k":"thu","s":"2026-12-08","t":"ثلوثية","id":"e051"},{"done":false,"e":"2026-12-15","k":"thu","s":"2026-12-15","t":"ثلوثية","id":"e052"},{"done":false,"e":"2026-12-20","k":"space","s":"2026-12-20","t":"بوصلة حالم (تويتر)","id":"e053"},{"done":false,"e":"2027-01-03","k":"space","s":"2027-01-03","t":"بوصلة حالم (تويتر)","id":"e054"},{"done":false,"e":"2027-01-05","k":"meet","s":"2027-01-05","t":"شارك تانك","id":"e055"},{"done":false,"e":"2027-01-12","k":"camp","s":"2027-01-12","t":"معسكر الاستشارات","id":"e056"},{"done":false,"e":"2026-08-23","k":"acad","s":"2026-08-23","t":"استقبال طلبات إعادة القيد","id":"e057"},{"done":false,"e":"2026-08-30","k":"acad","s":"2026-08-30","t":"بداية الدراسة للفصل الأول","id":"e058"},{"done":false,"e":"2026-08-31","k":"acad","s":"2026-08-31","t":"تقارير التسجيل","id":"e059"},{"done":false,"e":"2026-09-06","k":"acad","s":"2026-09-06","t":"بداية التقديم لتأجيل الفصل","id":"e060"},{"done":false,"e":"2026-09-13","k":"acad","s":"2026-09-13","t":"بداية التسجيل على وثيقة المتوقع تخرجهم","id":"e061"},{"done":false,"e":"2026-09-20","k":"acad","s":"2026-09-20","t":"بداية تقديم طلبات الاعتذار","id":"e062"},{"done":false,"e":"2026-09-26","k":"hol","s":"2026-09-23","t":"إجازة اليوم الوطني","id":"e063"},{"done":false,"e":"2026-10-13","k":"exam","s":"2026-10-12","t":"اختبارات الدوري الأول","id":"e064"},{"done":false,"e":"2026-11-01","k":"acad","s":"2026-11-01","t":"بداية تسجيل الطلاب للفصل الثاني","id":"e065"},{"done":false,"e":"2026-11-18","k":"exam","s":"2026-11-16","t":"اختبارات الدوري الثاني","id":"e066"},{"done":false,"e":"2026-11-18","k":"acad","s":"2026-11-18","t":"مهم جداً","id":"e067"},{"done":false,"e":"2026-11-28","k":"hol","s":"2026-11-20","t":"إجازة الخريف","id":"e068"},{"done":false,"e":"2026-11-30","k":"acad","s":"2026-11-30","t":"نهاية فترة التسجيل للفصل الثاني","id":"e069"},{"done":false,"e":"2026-12-13","k":"acad","s":"2026-12-13","t":"بداية التسجيل في الكليات","id":"e070"},{"done":false,"e":"2026-12-19","k":"acad","s":"2026-12-19","t":"بداية ترصيد الاختبارات النهائية","id":"e071"},{"done":false,"e":"2026-12-24","k":"exam","s":"2026-12-21","t":"الاختبارات النهائية","id":"e072"},{"done":false,"e":"2026-12-31","k":"exam","s":"2026-12-27","t":"الاختبارات النهائية","id":"e073"},{"done":false,"e":"2027-01-04","k":"acad","s":"2027-01-04","t":"نهاية تقديم طلبات التأجيل","id":"e074"},{"done":false,"e":"2027-01-06","k":"acad","s":"2027-01-06","t":"نهاية التسجيل على وثيقة المتوقع تخرجهم","id":"e075"},{"done":false,"e":"2027-01-07","k":"acad","s":"2027-01-07","t":"نهاية ترصيد الاختبارات النهائية","id":"e076"},{"doc":false,"done":false,"e":"2026-11-05","k":"cmw3nflsq","kc":"#f92f2f","kn":"مفاجآه","s":"2026-11-05","t":"مهم","id":"gb1yd52h7o55lkelwpig"},{"done":false,"e":"2026-11-10","k":"thu","s":"2026-11-10","t":"سهيل حبيبي","id":"oi3i53u3w12p2khal29f"}];
 var SEED=[];
@@ -398,10 +399,13 @@ async function gate(cb){
   if(pinDoc===undefined)pinDoc=null;
   gateCb=cb;var setMode=!pinDoc;
   document.getElementById("ph").textContent="كلمة سر";
+  if(fbMode){var ppx=document.getElementById("pp");ppx.type="password";ppx.classList.remove("sec");ppx.setAttribute("autocomplete","current-password");ppx.maxLength=128;
+    document.getElementById("pel").hidden=false;document.getElementById("kbt").hidden=true;document.getElementById("kb").hidden=true;
+    document.getElementById("ph").textContent="تسجيل دخول المحرر"}
   document.getElementById("phint").hidden=true;
   document.getElementById("pp2l").hidden=!setMode;
   document.getElementById("pp").value="";document.getElementById("pp2").value="";document.getElementById("pmsg").textContent="";
-  ov3.hidden=false;document.getElementById("pp").focus();
+  ov3.hidden=false;document.getElementById(fbMode&&!document.getElementById("pe").value?"pe":"pp").focus();
 }
 function closeGate(){ov3.hidden=true;gateCb=null}
 document.getElementById("pcancel").onclick=closeGate;
@@ -409,6 +413,18 @@ ov3.addEventListener("click",function(ev){if(ev.target===ov3)closeGate()});
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&!ov3.hidden)closeGate()});
 document.getElementById("pf").addEventListener("submit",async function(ev){
   ev.preventDefault();var m=document.getElementById("pmsg"),v=document.getElementById("pp").value.trim(),setMode=!pinDoc;
+  if(fbMode){
+    var em=document.getElementById("pe").value.trim(),pw=document.getElementById("pp").value;
+    if(!em||!pw){m.textContent="اكتب الإيميل وكلمة السر.";return}
+    if(Date.now()<lockUntil){m.textContent="محاولات كثيرة. انتظر نصف دقيقة وحاول مجدداً.";return}
+    m.textContent="جارٍ تسجيل الدخول…";
+    try{await fbU.signInWithEmailAndPassword(fbAuth,em,pw)}
+    catch(e){var c=e&&e.code;
+      if(c==="auth/too-many-requests")m.textContent="محاولات كثيرة. انتظر قليلاً وحاول مجدداً.";
+      else if(c==="auth/network-request-failed")m.textContent="تعذر الاتصال. تأكد من الإنترنت وحاول مجدداً.";
+      else{tries++;if(tries>=5){tries=0;lockUntil=Date.now()+30000}m.textContent="الإيميل أو كلمة السر غير صحيحة."}
+      return}
+    tries=0;unlocked=true;var cb1=gateCb;closeGate();if(fbSeed)fbSeed();if(cb1)cb1();return}
   if(v.length<4||v.length>40){m.textContent="كلمة السر من 4 إلى 40 حرفاً.";return}
   if(!(window.crypto&&crypto.subtle)){m.textContent="المتصفح لا يدعم التحقق من كلمة السر.";return}
   try{
@@ -418,10 +434,6 @@ document.getElementById("pf").addEventListener("submit",async function(ev){
       if(db)await db.doc("config/pin").set(rec);pinDoc=rec;
     }else{
       if(Date.now()<lockUntil){m.textContent="محاولات كثيرة. انتظر نصف دقيقة وحاول مجدداً.";return}
-      if(fbMode){var cands=[v];if(nz(v)!==v)cands.push(nz(v));if(/[\u0600-\u06FF]/.test(v))cands.push(nz(arToLatin(v)));var okf=false,lastE=null;
-        for(var ci=0;ci<cands.length&&!okf;ci++){try{await fbU.signInWithEmailAndPassword(fbAuth,FB_ADMIN,cands[ci]);okf=true}catch(e){lastE=e}}
-        if(!okf){m.textContent=lastE&&lastE.code==="auth/too-many-requests"?"محاولات كثيرة. انتظر قليلاً وحاول مجدداً.":"كلمة السر غير صحيحة.";return}
-        unlocked=true;var cb0=gateCb;closeGate();if(fbSeed)fbSeed();if(cb0)cb0();return}
       var okp=(await sha(v,pinDoc.salt))===pinDoc.h;if(!okp&&/^[\x20-\x7e]+$/.test(v))okp=(await sha(latinToAr(v),pinDoc.salt))===pinDoc.h;if(!okp&&/[\u0600-\u06FF]/.test(v))okp=(await sha(arToLatin(v),pinDoc.salt))===pinDoc.h;
       if(!okp){tries++;if(tries>=5){tries=0;lockUntil=Date.now()+30000}m.textContent="كلمة السر غير صحيحة.";return}
     }
@@ -429,7 +441,7 @@ document.getElementById("pf").addEventListener("submit",async function(ev){
   }catch(err){m.textContent="تعذر التحقق حالياً. حاول مرة أخرى."}
 });
 function setWrite(v){canWrite=v;document.getElementById("addBtn").hidden=!v;renderAgenda();
-  document.getElementById("note").innerHTML=localMode?'<div class="note">وضع تجريبي: قاعدة البيانات غير مربوطة بعد، فالتعديلات لا تُحفظ بعد إعادة تحميل الصفحة.</div>':(v?'<div class="note">وضع المحرر: لإضافة فعالية أو تعديلها اكتب كلمة السر. التغييرات تُحفظ وتظهر لكل الزوار.</div>':"")}
+  document.getElementById("note").innerHTML=localMode?'<div class="note">وضع تجريبي: قاعدة البيانات غير مربوطة بعد، فالتعديلات لا تُحفظ بعد إعادة تحميل الصفحة.</div>':(v?'<div class="note">وضع المحرر: لإضافة فعالية أو تعديلها سجّل الدخول بالإيميل وكلمة السر. التغييرات تُحفظ وتظهر لكل الزوار.</div>':"")}
 render();setWrite(true);
 /* shared storage */
 (async function(){
@@ -458,7 +470,8 @@ async function initFB(){
     var isEmpty=false;
     fbSeed=async function(){if(!isEmpty||!unlocked)return;isEmpty=false;
       for(var i=0;i<SNAP.length;i+=400){var b=F.writeBatch(fs);SNAP.slice(i,i+400).forEach(function(v){var o=Object.assign({},v);delete o.id;b.set(F.doc(fs,"events",v.id),o)});await b.commit()}};
-    fbU.onAuthStateChanged(fbAuth,function(us){unlocked=!!(us&&us.email===FB_ADMIN);if(unlocked)fbSeed()});
+    fbU.onAuthStateChanged(fbAuth,function(us){unlocked=!!us;document.getElementById("outBtn").hidden=!us;if(unlocked)fbSeed()});
+    document.getElementById("outBtn").onclick=function(){fbU.signOut(fbAuth)};
     fbMode=true;
     ad.collection("events").onSnapshot(function(snap){
       db=ad;localMode=false;isEmpty=snap.empty;
