@@ -120,14 +120,16 @@ section{padding-block:24px 8px}
 .dc.td .dn b{background:var(--pri);color:var(--pri-t);border-radius:999px;padding:0 7px}
 .chp{border-radius:6px;padding:2px 6px;color:#fff;font:500 11.5px/1.45 var(--f-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;border:0;text-align:start;width:100%}
 .chp.dn2{opacity:.65}
-.chp.pst{background-image:repeating-linear-gradient(135deg,#ffffff40 0 4px,transparent 4px 8px)!important;outline:1.5px dashed #ffffffb0;outline-offset:-2px}
 .more{font-size:11px;color:var(--mute)}
 .ag{box-shadow:var(--sh);margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .ag h3{font-size:17px;margin-bottom:10px}
 .ae{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
 .ae .tag{flex:none}.ae span.n{flex:1;min-width:0}
 .ab{margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap}
-.ptag{font-size:11px;background:#e08a2c;color:#1a1630;border-radius:999px;padding:1px 8px;margin-inline-start:6px;font-weight:600}
+.pl h3{display:flex;align-items:center;gap:8px}
+.pl .cnt{font:600 12px var(--f-body);background:#e08a2c;color:#1a1630;border-radius:999px;padding:1px 9px}
+.pl .hint{color:var(--mute);font-size:13px;margin:0 0 6px}
+.pl .ae .n small{display:block;color:var(--mute);font-weight:400;font-size:12.5px}
 .dtag{font-size:11px;background:var(--emerald);color:#fff;border-radius:999px;padding:1px 8px;margin-inline-start:6px}
 .logo{display:block;height:84px;width:auto;margin:0 auto;filter:var(--logo-f)}
 .lh{display:flex;justify-content:center;padding-block:22px 6px}
@@ -224,6 +226,7 @@ footer{margin-top:72px;border-top:1px solid var(--line);padding-block:28px;color
   </div>
   <div class="mg" id="mg"></div>
   <div class="ag" id="ag"></div>
+  <div class="ag pl" id="pl"></div>
   <div class="lg" id="lg"></div>
 </section>
 </main>
@@ -290,7 +293,8 @@ var hjMo=new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn",{month:"l
 var today=new Date();today.setHours(0,0,0,0);
 if(today<d("2026-08-23")||today>d("2027-01-16"))today=d("2026-11-03");
 var view=new Date(today.getFullYear(),today.getMonth(),1),sel=iso(today);
-function vis(){return events.filter(function(e){return cur==="all"||e.k===cur}).sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:a.t<b.t?-1:1})}
+function vis(){return events.filter(function(e){return !e.post&&(cur==="all"||e.k===cur)}).sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:a.t<b.t?-1:1})}
+function postList(){return events.filter(function(e){return e.post&&(cur==="all"||e.k===cur)}).sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:a.t<b.t?-1:1})}
 function onDay(list,s){return list.filter(function(e){return e.s<=s&&s<=e.e})}
 function render(){syncTypes();buildFilters();renderCal();renderAgenda()}
 function renderCal(){
@@ -305,7 +309,7 @@ function renderCal(){
     for(var k=0;k<7;k++){
       var x=new Date(st);x.setDate(st.getDate()+k);var s=iso(x),ev=onDay(L,s);
       h+='<div class="dc'+(x.getMonth()!==m?" out":"")+(+x===+today?" td":"")+(s===sel?" sel":"")+'" data-d="'+s+'" tabindex="0"><div class="dn"><b>'+x.getDate()+"</b><small>"+hjD.format(x)+"</small></div>"+
-        ev.slice(0,3).map(function(e){return'<button type="button" class="chp'+(e.done?" dn2":"")+(e.post?" pst":"")+'" data-id="'+e.id+'" style="--c:'+(T[e.k]?T[e.k][1]:"#555")+';background:'+(T[e.k]?T[e.k][1]:"#555")+';color:'+tc(T[e.k]&&T[e.k][1])+'" title="'+esc(e.t)+'">'+(e.post?"⌛ ":e.done?"✓ ":"")+esc(e.t)+"</button>"}).join("")+(ev.length>3?'<span class="more">+'+(ev.length-3)+"</span>":"")+"</div>";
+        ev.slice(0,3).map(function(e){return'<button type="button" class="chp'+(e.done?" dn2":"")+'" data-id="'+e.id+'" style="--c:'+(T[e.k]?T[e.k][1]:"#555")+';background:'+(T[e.k]?T[e.k][1]:"#555")+';color:'+tc(T[e.k]&&T[e.k][1])+'" title="'+esc(e.t)+'">'+(e.done?"✓ ":"")+esc(e.t)+"</button>"}).join("")+(ev.length>3?'<span class="more">+'+(ev.length-3)+"</span>":"")+"</div>";
     }
     st.setDate(st.getDate()+7);
   }
@@ -315,8 +319,16 @@ function renderCal(){
 function renderAgenda(){
   var ev=onDay(vis(),sel);
   document.getElementById("ag").innerHTML="<h3>"+wd.format(d(sel))+"، "+gr.format(d(sel))+" · "+hjD.format(d(sel))+" "+hjMo.format(d(sel))+" هـ</h3>"+
-    (ev.length?ev.map(function(e){var dd=e.doc;return'<div class="ae"><span class="tag" style="--c:'+T[e.k][1]+';background:'+T[e.k][1]+';color:'+tc(T[e.k][1])+'">'+T[e.k][0]+'</span><span class="n">'+esc(e.t)+(e.done?' <span class="ok">✓</span>':"")+(e.post?'<span class="ptag">⌛ مؤجلة</span>':"")+(dd?'<span class="dtag">موثقة</span>':"")+'</span><span class="ab">'+(canWrite?'<button class="ib" data-edit="'+e.id+'">تعديل</button>':"")+"</span></div>"}).join(""):'<p style="color:var(--mute);margin:0">لا توجد فعاليات في هذا اليوم.</p>')+
+    (ev.length?ev.map(function(e){var dd=e.doc;return'<div class="ae"><span class="tag" style="--c:'+T[e.k][1]+';background:'+T[e.k][1]+';color:'+tc(T[e.k][1])+'">'+T[e.k][0]+'</span><span class="n">'+esc(e.t)+(e.done?' <span class="ok">✓</span>':"")+(dd?'<span class="dtag">موثقة</span>':"")+'</span><span class="ab">'+(canWrite?'<button class="ib" data-edit="'+e.id+'">تعديل</button>':"")+"</span></div>"}).join(""):'<p style="color:var(--mute);margin:0">لا توجد فعاليات في هذا اليوم.</p>')+
     (canWrite?'<div style="margin-top:12px"><button class="btn pri" data-add="'+sel+'">+ أضف فعالية في هذا اليوم</button></div>':"");
+  renderPost();
+}
+function renderPost(){
+  var L=postList();
+  document.getElementById("pl").innerHTML='<h3>⌛ الفعاليات المؤجلة'+(L.length?'<span class="cnt">'+L.length+"</span>":"")+"</h3>"+
+    (L.length?(canWrite?'<p class="hint">لإعادة فعالية للتقويم اضغط تعديل، وأزل علامة «مؤجلة»، واختر موعدها الجديد.</p>':"")+L.map(function(e){
+      var when=e.s===e.e?gr.format(d(e.s)):gr.format(d(e.s))+" – "+gr.format(d(e.e));
+      return'<div class="ae"><span class="tag" style="--c:'+T[e.k][1]+';background:'+T[e.k][1]+';color:'+tc(T[e.k][1])+'">'+T[e.k][0]+'</span><span class="n">'+esc(e.t)+'<small>كان موعدها: '+when+'</small></span><span class="ab">'+(canWrite?'<button class="ib" data-edit="'+e.id+'">تعديل</button>':"")+"</span></div>"}).join(""):'<p style="color:var(--mute);margin:0">لا توجد فعاليات مؤجلة.</p>');
 }
 /* filters */
 var f=document.getElementById("filters");
@@ -334,7 +346,7 @@ document.getElementById("mg").addEventListener("click",function(ev){
   renderCal();renderAgenda();
 });
 document.getElementById("mg").addEventListener("keydown",function(ev){if(ev.key==="Enter"&&ev.target.classList.contains("dc")){sel=ev.target.dataset.d;renderCal();renderAgenda()}});
-document.getElementById("ag").addEventListener("click",function(ev){var a=ev.target.closest("[data-add]"),e=ev.target.closest("[data-edit]");if(a)openEd(null,a.dataset.add);if(e)openEd(e.dataset.edit)});
+["ag","pl"].forEach(function(id){document.getElementById(id).addEventListener("click",function(ev){var a=ev.target.closest("[data-add]"),e=ev.target.closest("[data-edit]");if(a)openEd(null,a.dataset.add);if(e)openEd(e.dataset.edit)})});
 document.getElementById("addBtn").onclick=function(){openEd(null,sel)};
 /* editor */
 var ov=document.getElementById("ov"),editing=null;
