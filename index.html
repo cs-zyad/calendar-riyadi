@@ -352,7 +352,7 @@ var SEED=[];
 var BI=Object.keys(T);
 var WS=["أحد","اثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"];
 function tc(h){var m=/^#?([0-9a-f]{6})/i.exec(h||"");if(!m)return"#fff";var n=parseInt(m[1],16),l=(0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))/255;return l>0.62?"#1a1630":"#fff"}
-function syncTypes(){events.forEach(function(e){if(!T[e.k]&&e.kn)T[e.k]=[e.kn,e.kc||"#6b7280","",1]});events.forEach(function(e){if(!T[e.k])e.k="meet"})}
+function syncTypes(){var used={};events.forEach(function(e){used[e.k]=1;if(!T[e.k]&&e.kn)T[e.k]=[e.kn,e.kc||"#6b7280","",1]});Object.keys(T).forEach(function(k){if(BI.indexOf(k)<0&&!used[k])delete T[k]});if(cur!=="all"&&!T[cur])cur="all";events.forEach(function(e){if(!T[e.k])e.k="meet"})}
 var DONE_UNTIL="2026-10-29";
 var events=SNAP.map(function(v){return{id:v.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post,ds:Array.isArray(v.ds)&&v.ds.length?v.ds:null}}).concat(SEED.map(function(r,i){return{id:"e"+String(i+1).padStart(3,"0"),s:r[0],e:r[3]||r[0],t:r[1],k:r[2],done:r[0]<=DONE_UNTIL&&!!T[r[2]][3]}}));
 var uid=null,db=null,canWrite=false,localMode=true,cur="all";
