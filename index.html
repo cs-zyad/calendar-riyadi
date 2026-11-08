@@ -156,6 +156,14 @@ input[type=color]{height:44px;padding:3px;cursor:pointer}
 .md h3{font-size:20px}
 .md .acts{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between}
 .btn.dg{border-color:var(--dgl);color:var(--dg)}
+#mdBtn{justify-self:start}
+.md2{display:grid;gap:8px}
+.mdr{display:flex;gap:8px}.mdr input{flex:1;min-width:0}
+.mdl{display:flex;flex-wrap:wrap;gap:6px}
+.mdc{display:inline-flex;align-items:center;gap:4px;background:var(--sel);border:1px solid var(--gold);border-radius:999px;padding:2px 4px 2px 12px;font-size:13px;color:var(--fg);font-variant-numeric:tabular-nums}
+.mdc button{border:0;background:transparent;color:var(--mute);font-size:17px;line-height:1;cursor:pointer;width:28px;height:28px;border-radius:50%}
+.mdc button:hover{color:var(--fg);background:#ffffff14}
+.mdh{color:var(--mute);font-size:13px}
 .ckr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .ck{display:flex;gap:6px;align-items:center;justify-content:center;text-align:center;min-height:48px;padding:6px 8px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:13px;line-height:1.4;color:var(--fg);cursor:pointer;min-width:0}
 .ck input{width:auto;flex:none;margin:0;accent-color:var(--gold)}
@@ -301,6 +309,12 @@ footer{margin-top:72px;border-top:1px solid var(--line);padding-block:28px;color
     <div class="nt" id="nt" hidden><label for="en">اسم النوع الجديد<input id="en" maxlength="30"></label><label for="ec">لون النوع<input id="ec" type="color" value="#7c4dff"></label></div>
     <label for="es">تاريخ البداية<input id="es" type="date" required></label>
     <label for="ee">تاريخ النهاية (اختياري للفعاليات متعددة الأيام)<input id="ee" type="date"></label>
+    <button type="button" class="ib" id="mdBtn">+ أيام متفرقة</button>
+    <div class="md2" id="md2" hidden>
+      <label for="mdIn">أيام الفعالية (اختر يوم واضغط إضافة)</label>
+      <div class="mdr"><input id="mdIn" type="date"><button type="button" class="ib" id="mdAdd">إضافة</button></div>
+      <div class="mdl" id="mdl"></div>
+    </div>
     <div class="ckr"><label class="ck" for="ed"><input id="ed" type="checkbox"><span>منفذة ✓</span></label><label class="ck" for="epost"><input id="epost" type="checkbox"><span>مؤجلة ⌛</span></label><label class="ck" for="edoc"><input id="edoc" type="checkbox"><span>نموذج التوثيق ✓</span></label></div>
     <div class="msg" id="em" role="alert"></div>
     <div class="acts"><button class="btn pri" type="submit" id="esave">حفظ</button><button class="btn" type="button" id="ecancel">إلغاء</button><button class="btn dg" type="button" id="edel" hidden>حذف</button></div>
@@ -340,7 +354,7 @@ var WS=["أحد","اثنين","ثلاثاء","أربعاء","خميس","جمعة
 function tc(h){var m=/^#?([0-9a-f]{6})/i.exec(h||"");if(!m)return"#fff";var n=parseInt(m[1],16),l=(0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))/255;return l>0.62?"#1a1630":"#fff"}
 function syncTypes(){events.forEach(function(e){if(!T[e.k]&&e.kn)T[e.k]=[e.kn,e.kc||"#6b7280","",1]});events.forEach(function(e){if(!T[e.k])e.k="meet"})}
 var DONE_UNTIL="2026-10-29";
-var events=SNAP.map(function(v){return{id:v.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post}}).concat(SEED.map(function(r,i){return{id:"e"+String(i+1).padStart(3,"0"),s:r[0],e:r[3]||r[0],t:r[1],k:r[2],done:r[0]<=DONE_UNTIL&&!!T[r[2]][3]}}));
+var events=SNAP.map(function(v){return{id:v.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post,ds:Array.isArray(v.ds)&&v.ds.length?v.ds:null}}).concat(SEED.map(function(r,i){return{id:"e"+String(i+1).padStart(3,"0"),s:r[0],e:r[3]||r[0],t:r[1],k:r[2],done:r[0]<=DONE_UNTIL&&!!T[r[2]][3]}}));
 var uid=null,db=null,canWrite=false,localMode=true,cur="all";
 function d(s){return new Date(s+"T00:00:00")}
 function iso(x){return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")}
@@ -356,7 +370,7 @@ if(today<d("2026-08-23")||today>d("2027-01-16"))today=d("2026-11-03");
 var view=new Date(today.getFullYear(),today.getMonth(),1),sel=iso(today);
 function vis(){return events.filter(function(e){return !e.post&&(cur==="all"||e.k===cur)}).sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:a.t<b.t?-1:1})}
 function postList(){return events.filter(function(e){return e.post&&(cur==="all"||e.k===cur)}).sort(function(a,b){return a.s<b.s?-1:a.s>b.s?1:a.t<b.t?-1:1})}
-function onDay(list,s){return list.filter(function(e){return e.s<=s&&s<=e.e})}
+function onDay(list,s){return list.filter(function(e){return e.ds?e.ds.indexOf(s)>=0:(e.s<=s&&s<=e.e)})}
 function render(){syncTypes();buildFilters();renderCal();renderAgenda()}
 function renderCal(){
   var L=vis(),y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
@@ -388,7 +402,7 @@ function renderPost(){
   var L=postList();
   document.getElementById("pl").innerHTML='<h3>⌛ الفعاليات المؤجلة'+(L.length?'<span class="cnt">'+L.length+"</span>":"")+"</h3>"+
     (L.length?(canWrite?'<p class="hint">لإعادة فعالية للتقويم اضغط تعديل، وأزل علامة «مؤجلة»، واختر موعدها الجديد.</p>':"")+L.map(function(e){
-      var when=e.s===e.e?gr.format(d(e.s)):gr.format(d(e.s))+" – "+gr.format(d(e.e));
+      var when=e.ds?e.ds.map(function(x){return gr.format(d(x))}).join("، "):e.s===e.e?gr.format(d(e.s)):gr.format(d(e.s))+" – "+gr.format(d(e.e));
       return'<div class="ae"><span class="tag" style="--c:'+T[e.k][1]+';background:'+T[e.k][1]+';color:'+tc(T[e.k][1])+'">'+T[e.k][0]+'</span><span class="n">'+esc(e.t)+'<small>كان موعدها: '+when+'</small></span><span class="ab">'+(canWrite?'<button class="ib" data-edit="'+e.id+'">تعديل</button>':"")+"</span></div>"}).join(""):'<p style="color:var(--mute);margin:0">لا توجد فعاليات مؤجلة.</p>');
 }
 /* filters */
@@ -418,10 +432,16 @@ function openEdRaw(id,date){
   editing=id;var e=id&&events.filter(function(x){return x.id===id})[0];
   document.getElementById("eh").textContent=e?"تعديل الفعالية":"فعالية جديدة";
   fillKinds();document.getElementById("et").value=e?e.t:"";document.getElementById("ek").value=e?e.k:"meet";document.getElementById("nt").hidden=true;document.getElementById("en").value="";document.getElementById("ec").value="#7c4dff";
-  document.getElementById("es").value=e?e.s:date;document.getElementById("ee").value=e&&e.e!==e.s?e.e:"";
+  document.getElementById("es").value=e?e.s:date;document.getElementById("ee").value=e&&e.e!==e.s&&!e.ds?e.e:"";mdays=e&&e.ds?e.ds.slice():[];document.getElementById("mdIn").value="";setMd(mdays.length>0);
   document.getElementById("ed").checked=e?!!e.done:false;document.getElementById("edoc").checked=e?!!e.doc:false;document.getElementById("epost").checked=e?!!e.post:false;document.getElementById("em").textContent="";
   document.getElementById("edel").hidden=!e;ov.hidden=false;document.getElementById("et").focus();
 }
+var mdays=[];
+function drawMd(){document.getElementById("mdl").innerHTML=mdays.length?mdays.map(function(x){return'<span class="mdc">'+wd.format(d(x))+" "+gr.format(d(x))+'<button type="button" data-rm="'+x+'" aria-label="حذف اليوم">×</button></span>'}).join(""):'<span class="mdh">لم تُضف أيام بعد. أضف يومين أو أكثر.</span>'}
+function setMd(on){document.getElementById("md2").hidden=!on;document.getElementById("es").closest("label").hidden=on;document.getElementById("ee").closest("label").hidden=on;document.getElementById("mdBtn").textContent=on?"↩ رجوع لتاريخ بداية ونهاية":"+ أيام متفرقة";drawMd()}
+document.getElementById("mdBtn").onclick=function(){var on=document.getElementById("md2").hidden;if(on&&!mdays.length){var v0=document.getElementById("es").value;if(v0)mdays=[v0]}setMd(on);if(on)document.getElementById("mdIn").focus()};
+document.getElementById("mdAdd").onclick=function(){var v=document.getElementById("mdIn").value;if(v&&mdays.indexOf(v)<0){mdays.push(v);mdays.sort()}document.getElementById("mdIn").value="";drawMd()};
+document.getElementById("mdl").addEventListener("click",function(ev){var b=ev.target.closest("[data-rm]");if(!b)return;mdays=mdays.filter(function(x){return x!==b.dataset.rm});drawMd()});
 function closeEd(){ov.hidden=true;editing=null}
 document.getElementById("ed").addEventListener("change",function(){if(this.checked)document.getElementById("epost").checked=false});
 document.getElementById("epost").addEventListener("change",function(){if(this.checked)document.getElementById("ed").checked=false});
@@ -433,6 +453,8 @@ document.getElementById("ef").addEventListener("submit",async function(ev){
   ev.preventDefault();
   var t=document.getElementById("et").value.trim(),s=document.getElementById("es").value,e2=document.getElementById("ee").value||s,m=document.getElementById("em");
   if(!t){m.textContent="اكتب اسم الفعالية.";return}
+  var multi=!document.getElementById("md2").hidden;
+  if(multi){if(mdays.length<2){m.textContent="أضف يومين أو أكثر للأيام المتفرقة.";return}s=mdays[0];e2=mdays[mdays.length-1]}
   if(!s){m.textContent="اختر تاريخ البداية.";return}
   if(e2<s){m.textContent="تاريخ النهاية قبل البداية.";return}
   var kv=document.getElementById("ek").value,extra={};
@@ -440,7 +462,7 @@ document.getElementById("ef").addEventListener("submit",async function(ev){
     var ex=Object.keys(T).filter(function(q){return T[q][0]===nm})[0];
     if(ex){kv=ex}else{kv="c"+Date.now().toString(36);T[kv]=[nm,document.getElementById("ec").value,"",1]}}
   if(BI.indexOf(kv)<0){extra={kn:T[kv][0],kc:T[kv][1]}}
-  var rec=Object.assign({t:t,k:kv,s:s,e:e2,},extra,{done:document.getElementById("ed").checked,doc:document.getElementById("edoc").checked,post:document.getElementById("epost").checked});
+  var rec=Object.assign({t:t,k:kv,s:s,e:e2,},extra,{done:document.getElementById("ed").checked,doc:document.getElementById("edoc").checked,post:document.getElementById("epost").checked},multi?{ds:mdays.slice()}:{});
   try{
     if(db){var ref=editing?db.doc("events/"+editing):db.collection("events").doc();await ref.set(rec);if(!editing)rec.id=ref.id}
     else if(!editing)rec.id="L"+Date.now();
@@ -533,7 +555,7 @@ render();setWrite(true);
     var ce=u?await u.canEdit():false;
     store.collection("events").onSnapshot(function(snap){
       clearTimeout(timer);db=store;localMode=false;
-      events=snap.docs.map(function(x){var v=x.data();return{id:x.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post}});
+      events=snap.docs.map(function(x){var v=x.data();return{id:x.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post,ds:Array.isArray(v.ds)&&v.ds.length?v.ds:null}});
       setWrite(ce);render();
     },function(){clearTimeout(timer);document.getElementById("note").innerHTML='<div class="note">تعذر قراءة الفعاليات المحفوظة.</div>'});
     try{uid=u?await u.id():null}catch(e){}
@@ -556,7 +578,7 @@ async function initFB(){
     fbMode=true;
     ad.collection("events").onSnapshot(function(snap){
       db=ad;localMode=false;isEmpty=snap.empty;
-      if(!snap.empty)events=snap.docs.map(function(x){var v=x.data();return{id:x.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post}});
+      if(!snap.empty)events=snap.docs.map(function(x){var v=x.data();return{id:x.id,s:v.s,e:v.e||v.s,t:v.t,k:v.k,kn:v.kn,kc:v.kc,done:!!v.done,doc:!!v.doc,post:!!v.post,ds:Array.isArray(v.ds)&&v.ds.length?v.ds:null}});
       setWrite(true);render();if(isEmpty)fbSeed();
     },function(){document.getElementById("note").innerHTML='<div class="note">تعذر الاتصال بقاعدة البيانات. تأكد من إعدادات Firebase.</div>'});
   }catch(e){document.getElementById("note").innerHTML='<div class="note">تعذر تحميل Firebase.</div>'}
